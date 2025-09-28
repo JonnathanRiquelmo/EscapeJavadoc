@@ -31,7 +31,7 @@
     É altamente recomendável fazer backup dos arquivos antes de aplicar as mudanças com o parâmetro -Force.
 
 .LINK
-    https://github.com/jonna-dev/escape-unicode-javadoc
+    https://github.com/JonnathanRiquelmo/EscapeJavadoc
 #>
 
 [CmdletBinding()]
