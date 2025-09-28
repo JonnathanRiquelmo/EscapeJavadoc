@@ -94,7 +94,7 @@ Para executar os testes Pester que validam o funcionamento do script `EscapeJava
 
 1.  **Navegue até o diretório raiz do projeto:**
     ```powershell
-    cd C:\Users\jonna\Documents\escape-unicode-javadoc
+    cd C:\path\escape-unicode-javadoc
     ```
 
 2.  **Execute os testes Pester:**
@@ -225,7 +225,7 @@ To run the Pester tests that validate the functionality of the `EscapeJavadoc.ps
 
 1.  **Navigate to the project root directory:**
     ```powershell
-    cd C:\Users\jonna\Documents\escape-unicode-javadoc
+    cd C:\path\escape-unicode-javadoc
     ```
 
 2.  **Execute Pester tests:**
