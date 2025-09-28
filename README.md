@@ -1,5 +1,7 @@
 # EscapeJavadoc.ps1
 
+[Jump to English version](#english-version)
+
 ## 🚀 Visão Geral
 
 Este script PowerShell (`EscapeJavadoc.ps1`) foi desenvolvido para automatizar a conversão de caracteres acentuados e especiais em comentários (Javadoc, de bloco e de linha) dentro de arquivos `.java` para suas respectivas sequências de escape Unicode (`\uXXXX`) e vice-versa. Isso é particularmente útil em ambientes de desenvolvimento onde a codificação de caracteres pode causar problemas de compatibilidade ou exibição incorreta em ferramentas que não suportam UTF-8 nativamente para Javadoc, como algumas versões antigas do Javadoc ou sistemas de CI/CD.
@@ -127,3 +129,134 @@ Os seguintes testes são executados para garantir a funcionalidade e a robustez 
 ## Requisitos
 
 - PowerShell 5.1 ou superior (testado com PowerShell 7+).
+
+<a name="english-version"></a>
+# EscapeJavadoc.ps1
+
+## 🚀 Overview
+
+This PowerShell script (`EscapeJavadoc.ps1`) was developed to automate the conversion of accented and special characters in comments (Javadoc, block, and line comments) within `.java` files to their respective Unicode escape sequences (`\uXXXX`) and vice-versa. This is particularly useful in development environments where character encoding can cause compatibility issues or incorrect display in tools that do not natively support UTF-8 for Javadoc, such as some older versions of Javadoc or CI/CD systems.
+
+## ✨ Features
+
+- **Character Escaping**: Converts accented characters (e.g., `á`, `é`, `ç`) to their Unicode escape sequences (e.g., `\u00e1`, `\u00e9`, `\u00e7`).
+- **Character Unescaping**: Reverts Unicode escape sequences back to the original accented characters.
+- **Selective Processing**: Acts only on Javadoc comments (`/** ... */`), block comments (`/* ... */`), and line comments (`// ...`), ignoring code strings and other parts of the file.
+- **Simulation Mode**: Allows running the script without applying changes, showing which files would be modified and what changes would be made.
+- **Recursive Processing**: Supports processing files in directories and subdirectories.
+
+## ⚙️ Parameters
+
+- **`-Path <string>`**: (Mandatory) The path to the `.java` file or directory to be processed. If it's a directory, all `.java` files within it (and subdirectories, if `-Recurse` is used) will be processed.
+- **`-Mode <string>`**: (Mandatory) Defines the script's operation mode. Accepted values are:
+    - `'Escape'`: Converts accented characters to Unicode escape sequences.
+    - `'Unescape'`: Converts Unicode escape sequences back to accented characters.
+- **`-Recurse`**: (Switch) If present, the script will process `.java` files in all subdirectories of the specified path.
+- **`-Force`**: (Switch) If present, the script will apply changes directly to the files. Without this parameter, the script will run in simulation mode, displaying the modifications that would be made without saving the files.
+- **`-Encoding <string>`**: (Optional) The file encoding. The default is `'UTF8'`. It may be useful to specify other encodings if your `.java` files are not in UTF-8. Usage examples: `-Encoding UTF8`, `-Encoding Default`, `-Encoding ASCII`.
+
+## 💡 Getting Help
+
+To view the full documentation of the script and its parameters directly in the terminal, you can use the PowerShell `Get-Help` command:
+
+```powershell
+Get-Help .\src\EscapeJavadoc.ps1 -Full
+```
+
+Or, for quick help:
+
+```powershell
+.\src\EscapeJavadoc.ps1 -?
+```
+
+## 🧪 Usage Examples
+
+### 1. Escape characters in a single file (simulation mode)
+
+This command will analyze the `MyFile.java` file and show which accented characters would be converted to Unicode, but will not save the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste\Calculadora copy 1.java" -Mode Escape
+```
+
+### 2. Escape characters in a single file (applying changes)
+
+This command will convert the accented characters in the `MyFile.java` file to Unicode and save the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste\Calculadora copy 1.java" -Mode Escape -Force
+```
+
+### 3. Escape characters in a directory (non-recursive, simulation mode)
+
+This command will analyze all `.java` files in the `my-project/src` directory and show the conversions, but will not save the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste" -Mode Escape
+```
+
+### 4. Escape characters in a directory (recursive, applying changes)
+
+This command will convert the accented characters in all `.java` files within the `my-project/src` directory and its subdirectories, saving the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste" -Mode Escape -Recurse -Force
+```
+
+### 5. Revert escaped characters in a single file (applying changes)
+
+This command will convert Unicode escape sequences back to accented characters in the `MyFile.java` file and save the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste\Calculadora copy 1.java" -Mode Unescape -Force
+```
+
+### 6. Revert escaped characters in a directory (recursive, simulation mode)
+
+This command will analyze all `.java` files in the `my-project/src` directory and its subdirectories, showing the escape reversals, but will not save the changes.
+
+```powershell
+.\src\EscapeJavadoc.ps1 -Path ".\tests\arquivos-para-teste" -Mode Unescape -Recurse
+```
+
+## Running Tests
+
+To run the Pester tests that validate the functionality of the `EscapeJavadoc.ps1` script, follow the steps below:
+
+1.  **Navigate to the project root directory:**
+    ```powershell
+    cd C:\Users\jonna\Documents\escape-unicode-javadoc
+    ```
+
+2.  **Execute Pester tests:**
+    ```powershell
+    Invoke-Pester -Path ".\tests\EscapeJavadoc.Tests.ps1"
+    ```
+
+    This command will execute all tests defined in the `EscapeJavadoc.Tests.ps1` file. The results will indicate whether the script is working as expected, correctly converting Unicode characters in Javadoc comments and handling different operation modes (`Escape` and `Unescape`), recursion, and the `-Force` parameter.
+
+### Detailed Tests
+
+The following tests are executed to ensure the functionality and robustness of the script:
+
+*   **Context: Escape Mode**
+    *   **Should convert accented characters in a single file**: Verifies that the script can correctly convert accented characters to their Unicode representations in a single Java file.
+    *   **Should convert files in a directory (non-recursive)**: Ensures that the script processes all Java files in a specified directory, without entering subdirectories.
+    *   **Should convert files recursively**: Ensures that the script processes Java files in a directory and all its subdirectories when the `-Recurse` parameter is used.
+
+*   **Context: Unescape Mode**
+    *   **Should revert a file to accented characters**: Tests the script's ability to convert Unicode sequences back to original accented characters in a Java file.
+
+*   **Context: Security and Edge Cases**
+    *   **Should NOT modify files in simulation mode (without -Force)**: Confirms that the script does not make permanent changes to files when the `-Force` parameter is not provided, operating in simulation mode.
+    *   **Should NOT modify code strings outside comments**: Verifies that the script modifies *only* Javadoc, block, and line comments, and does not alter code strings or other parts of the Java source code.
+
+## Important Notes
+
+- **Backup**: Always back up your files before running the script with the `-Force` parameter, especially in large projects.
+- **Encoding**: Ensure that the specified encoding (`-Encoding`) matches the actual encoding of your `.java` files to avoid read/write issues.
+- **Comments Only**: The script is designed to modify *only* the content of comments. It should not alter code strings or other parts of your source code.
+
+## Requirements
+
+- PowerShell 5.1 or higher (tested with PowerShell 7+).
